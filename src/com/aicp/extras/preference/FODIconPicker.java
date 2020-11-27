@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 crDroid Android Project
+ * Copyright (C) 2019-2020 The Evolution X Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,22 +25,25 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import com.aicp.extras.R;
+
 import com.android.settingslib.Utils;
 import com.android.settingslib.widget.LayoutPreference;
 
-public class FODIconPicker {
-//public class FODIconPicker extends LayoutPreference {
+public class FODIconPicker extends LayoutPreference {
 
-    private Context mContext;
+    private boolean mAllowDividerAbove;
+    private boolean mAllowDividerBelow;
+
+    private View mRootView;
 
     private static ImageButton Button0;
     private static ImageButton Button1;
@@ -63,20 +66,50 @@ public class FODIconPicker {
     private static ImageButton Button18;
     private static ImageButton Button19;
     private static ImageButton Button20;
+    private static ImageButton Button21;
+    private static ImageButton Button22;
+    private static ImageButton Button23;
+    private static ImageButton Button24;
+    private static ImageButton Button25;
 
     private static final String TAG = "FODIconPicker";
-/*
+
     public FODIconPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
-        setView();
+        init(context, attrs, 0 /* defStyleAttr */);
     }
 
     public FODIconPicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
     }
 
-    private void setView() {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Preference);
+        mAllowDividerAbove = TypedArrayUtils.getBoolean(a, R.styleable.Preference_allowDividerAbove,
+                R.styleable.Preference_allowDividerAbove, false);
+        mAllowDividerBelow = TypedArrayUtils.getBoolean(a, R.styleable.Preference_allowDividerBelow,
+                R.styleable.Preference_allowDividerBelow, false);
+        a.recycle();
+
+        a = context.obtainStyledAttributes(
+                attrs, R.styleable.Preference, defStyleAttr, 0);
+        int layoutResource = a.getResourceId(R.styleable.Preference_android_layout, 0);
+        if (layoutResource == 0) {
+            throw new IllegalArgumentException("LayoutPreference requires a layout to be defined");
+        }
+        a.recycle();
+
+        // Need to create view now so that findViewById can be called immediately.
+        final View view = LayoutInflater.from(getContext())
+                .inflate(layoutResource, null, false);
+        setView(view, context);
+    }
+
+    private void setView(View view, Context context) {
+        setLayoutResource(R.layout.layout_preference_frame);
+        mRootView = view;
+        setShouldDisableView(false);
         Button0 = findViewById(R.id.fodicon0_button);
         Button1 = findViewById(R.id.fodicon1_button);
         Button2 = findViewById(R.id.fodicon2_button);
@@ -98,208 +131,258 @@ public class FODIconPicker {
         Button18 = findViewById(R.id.fodicon18_button);
         Button19 = findViewById(R.id.fodicon19_button);
         Button20 = findViewById(R.id.fodicon20_button);
+        Button21 = findViewById(R.id.fodicon21_button);
+        Button22 = findViewById(R.id.fodicon22_button);
+        Button23 = findViewById(R.id.fodicon23_button);
+        Button24 = findViewById(R.id.fodicon24_button);
+        Button25 = findViewById(R.id.fodicon25_button);
 
         int defaultfodicon = Settings.System.getInt(
-                mContext.getContentResolver(), Settings.System.FOD_ICON, 0);
+                context.getContentResolver(), Settings.System.FOD_ICON, 0);
         if (defaultfodicon==0) {
-            updateHighlightedItem(Button0);
+            updateHighlightedItem(Button0, context);
         } else if (defaultfodicon == 1) {
-            updateHighlightedItem(Button1);
+            updateHighlightedItem(Button1, context);
         } else if (defaultfodicon == 2) {
-            updateHighlightedItem(Button2);
+            updateHighlightedItem(Button2, context);
         } else if (defaultfodicon == 3) {
-            updateHighlightedItem(Button3);
+            updateHighlightedItem(Button3, context);
         } else if (defaultfodicon == 4) {
-            updateHighlightedItem(Button4);
+            updateHighlightedItem(Button4, context);
         } else if (defaultfodicon == 5) {
-            updateHighlightedItem(Button5);
+            updateHighlightedItem(Button5, context);
         } else if (defaultfodicon == 6) {
-            updateHighlightedItem(Button6);
+            updateHighlightedItem(Button6, context);
         } else if (defaultfodicon == 7) {
-            updateHighlightedItem(Button7);
+            updateHighlightedItem(Button7, context);
         } else if (defaultfodicon == 8) {
-            updateHighlightedItem(Button8);
+            updateHighlightedItem(Button8, context);
         } else if (defaultfodicon == 9) {
-            updateHighlightedItem(Button9);
+            updateHighlightedItem(Button9, context);
         } else if (defaultfodicon == 10) {
-            updateHighlightedItem(Button10);
+            updateHighlightedItem(Button10, context);
         } else if (defaultfodicon == 11) {
-            updateHighlightedItem(Button11);
+            updateHighlightedItem(Button11, context);
         } else if (defaultfodicon == 12) {
-            updateHighlightedItem(Button12);
+            updateHighlightedItem(Button12, context);
         } else if (defaultfodicon == 13) {
-            updateHighlightedItem(Button13);
+            updateHighlightedItem(Button13, context);
         } else if (defaultfodicon == 14) {
-            updateHighlightedItem(Button14);
+            updateHighlightedItem(Button14, context);
         } else if (defaultfodicon == 15) {
-            updateHighlightedItem(Button15);
+            updateHighlightedItem(Button15, context);
         } else if (defaultfodicon == 16) {
-            updateHighlightedItem(Button16);
+            updateHighlightedItem(Button16, context);
         } else if (defaultfodicon == 17) {
-            updateHighlightedItem(Button17);
+            updateHighlightedItem(Button17, context);
         } else if (defaultfodicon == 18) {
-            updateHighlightedItem(Button18);
+            updateHighlightedItem(Button18, context);
         } else if (defaultfodicon == 19) {
-            updateHighlightedItem(Button19);
+            updateHighlightedItem(Button19, context);
         } else if (defaultfodicon == 20) {
-            updateHighlightedItem(Button20);
+            updateHighlightedItem(Button20, context);
+        } else if (defaultfodicon == 21) {
+            updateHighlightedItem(Button21, context);
+        } else if (defaultfodicon == 22) {
+            updateHighlightedItem(Button22, context);
+        } else if (defaultfodicon == 23) {
+            updateHighlightedItem(Button23, context);
+        } else if (defaultfodicon == 24) {
+            updateHighlightedItem(Button24, context);
+        } else if (defaultfodicon == 25) {
+            updateHighlightedItem(Button25, context);
         }
 
         Button0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(0);
-                updateHighlightedItem(Button0);
+                updateSettings(0, context);
+                updateHighlightedItem(Button0, context);
             }
         });
         Button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(1);
-                updateHighlightedItem(Button1);
+                updateSettings(1, context);
+                updateHighlightedItem(Button1, context);
             }
         });
         Button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(2);
-                updateHighlightedItem(Button2);
+                updateSettings(2, context);
+                updateHighlightedItem(Button2, context);
             }
         });
         Button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(3);
-                updateHighlightedItem(Button3);
+                updateSettings(3, context);
+                updateHighlightedItem(Button3, context);
             }
         });
         Button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(4);
-                updateHighlightedItem(Button4);
+                updateSettings(4, context);
+                updateHighlightedItem(Button4, context);
             }
         });
         Button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(5);
-                updateHighlightedItem(Button5);
+                updateSettings(5, context);
+                updateHighlightedItem(Button5, context);
             }
         });
         Button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(6);
-                updateHighlightedItem(Button6);
+                updateSettings(6, context);
+                updateHighlightedItem(Button6, context);
             }
         });
         Button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(7);
-                updateHighlightedItem(Button7);
+                updateSettings(7, context);
+                updateHighlightedItem(Button7, context);
             }
         });
         Button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(8);
-                updateHighlightedItem(Button8);
+                updateSettings(8, context);
+                updateHighlightedItem(Button8, context);
             }
         });
         Button9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(9);
-                updateHighlightedItem(Button9);
+                updateSettings(9, context);
+                updateHighlightedItem(Button9, context);
             }
         });
         Button10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(10);
-                updateHighlightedItem(Button10);
+                updateSettings(10, context);
+                updateHighlightedItem(Button10, context);
             }
         });
         Button11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(11);
-                updateHighlightedItem(Button11);
+                updateSettings(11, context);
+                updateHighlightedItem(Button11, context);
             }
         });
         Button12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(12);
-                updateHighlightedItem(Button12);
+                updateSettings(12, context);
+                updateHighlightedItem(Button12, context);
             }
         });
         Button13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(13);
-                updateHighlightedItem(Button13);
+                updateSettings(13, context);
+                updateHighlightedItem(Button13, context);
             }
         });
         Button14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(14);
-                updateHighlightedItem(Button14);
+                updateSettings(14, context);
+                updateHighlightedItem(Button14, context);
             }
         });
         Button15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(15);
-                updateHighlightedItem(Button15);
+                updateSettings(15, context);
+                updateHighlightedItem(Button15, context);
             }
         });
         Button16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(16);
-                updateHighlightedItem(Button16);
+                updateSettings(16, context);
+                updateHighlightedItem(Button16, context);
             }
         });
         Button17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(17);
-                updateHighlightedItem(Button17);
+                updateSettings(17, context);
+                updateHighlightedItem(Button17, context);
             }
         });
         Button18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(18);
-                updateHighlightedItem(Button18);
+                updateSettings(18, context);
+                updateHighlightedItem(Button18, context);
             }
         });
         Button19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(19);
-                updateHighlightedItem(Button19);
+                updateSettings(19, context);
+                updateHighlightedItem(Button19, context);
             }
         });
         Button20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSettings(20);
-                updateHighlightedItem(Button20);
+                updateSettings(20, context);
+                updateHighlightedItem(Button20, context);
+            }
+        });
+        Button21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSettings(21, context);
+                updateHighlightedItem(Button21, context);
+            }
+        });
+        Button22.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSettings(22, context);
+                updateHighlightedItem(Button22, context);
+            }
+        });
+        Button23.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSettings(23, context);
+                updateHighlightedItem(Button23, context);
+            }
+        });
+        Button24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSettings(24, context);
+                updateHighlightedItem(Button24, context);
+            }
+        });
+        Button25.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSettings(25, context);
+                updateHighlightedItem(Button25, context);
             }
         });
     }
 
-    private void updateSettings(int fodicon) {
-        Settings.System.putInt(mContext.getContentResolver(), Settings.System.FOD_ICON, fodicon);
+    private void updateSettings(int fodicon, Context context) {
+        Settings.System.putInt(context.getContentResolver(), Settings.System.FOD_ICON, fodicon);
     }
 
-    private void updateHighlightedItem(ImageButton activebutton) {
-        int defaultcolor = mContext.getResources().getColor(R.color.fod_item_background_stroke_color);
+    private void updateHighlightedItem(ImageButton activebutton, Context context) {
+        int defaultcolor = context.getResources().getColor(R.color.fod_item_background_stroke_color);
         ColorStateList defaulttint = ColorStateList.valueOf(defaultcolor);
         Button0.setBackgroundTintList(defaulttint);
         Button1.setBackgroundTintList(defaulttint);
@@ -322,6 +405,11 @@ public class FODIconPicker {
         Button18.setBackgroundTintList(defaulttint);
         Button19.setBackgroundTintList(defaulttint);
         Button20.setBackgroundTintList(defaulttint);
+        Button21.setBackgroundTintList(defaulttint);
+        Button22.setBackgroundTintList(defaulttint);
+        Button23.setBackgroundTintList(defaulttint);
+        Button24.setBackgroundTintList(defaulttint);
+        Button25.setBackgroundTintList(defaulttint);
         activebutton.setBackgroundTintList(Utils.getColorAttr(getContext(), android.R.attr.colorAccent));
-    }*/
+    }
 }
