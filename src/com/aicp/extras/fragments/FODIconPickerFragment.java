@@ -26,10 +26,10 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
-import com.aicp.extras.BaseSettingsFragment;
+import com.android.settings.SettingsPreferenceFragment;;
 import com.aicp.extras.R;
 
-public abstract class FODIconPickerFragment extends BaseSettingsFragment {
+public abstract class FODIconPickerFragment extends SettingsPreferenceFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
