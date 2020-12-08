@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 The Evolution X Project
+ * Copyright (C) 2020 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,28 @@
 
 package com.aicp.extras.fragments;
 
+import com.android.internal.logging.nano.MetricsProto;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.provider.Settings;
-
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceScreen;
 
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-
-import com.android.settings.SettingsPreferenceFragment;;
+import com.aicp.extras.BaseSettingsFragment;
 import com.aicp.extras.R;
 
-public abstract class FODIconPickerFragment extends SettingsPreferenceFragment {
+public class FODIconPickerFragment extends BaseSettingsFragment {
+
+    @Override
+    protected int getPreferenceResource() {
+        return R.xml.fod_picker;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.fod_picker);
-
         getActivity().getActionBar().setTitle(R.string.fod_icon_picker_title);
     }
-
 }
