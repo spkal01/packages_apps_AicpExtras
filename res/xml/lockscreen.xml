@@ -208,5 +208,13 @@
                 android:entryValues="@array/fod_pressed_color_values"
                 android:defaultValue="@*android:integer/config_fod_pressed_color" />
 
+            <!-- Screen off fod -->
+            <com.aicp.gear.preference.SystemSettingIntListPreference
+                android:key="fod_gesture"
+                android:title="@string/fod_gesture_title"
+                android:summary="@string/fod_gesture_summary"
+                android:defaultValue="false"
+                settings:controller="com.android.settings.security.screenlock.ScreenOffFodPreferenceController" />
+
     </PreferenceCategory> 
 </PreferenceScreen>
