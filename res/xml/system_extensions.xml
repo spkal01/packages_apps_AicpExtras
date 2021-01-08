@@ -48,7 +48,7 @@
         android:key="volume_panel_stuff"
         android:title="@string/volume_panel">
 
-        <com.aicp.gear.preference.SystemSettingIntListPreference
+        <com.aicp.gear.preference.SystemSettingListPreference
             android:key="systemui_plugin_volume"
             android:title="@string/volume_panel"
             android:entries="@array/volume_panel_entries"
